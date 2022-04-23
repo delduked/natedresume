@@ -1,0 +1,23 @@
+stages:
+  - clear
+  - deploy
+
+build:
+  stage: clear
+  script:
+    - docker --version 
+    - echo "Removing any pre-existing containers and their volumes which may already exist..."
+    - docker-compose rm -f -s -v 
+    - echo "Removing any images related to docker compose file..."
+    - docker-compose down --rmi all 
+#  tags:
+#    - localshell
+#    - localrunner 
+
+deploy:
+  stage: deploy
+  script:
+    - docker-compose up -d --force-recreate 
+#  tags:
+#    - localhsell
+#    - localrunner

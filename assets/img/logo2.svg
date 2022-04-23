@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8000" height="8000" viewBox="0 0 8000 8000">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-SPRK_default_preset_name_custom_1);
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3, .cls-6 {
+        fill: #91f4ff;
+      }
+
+      .cls-4, .cls-5 {
+        fill: #2d5a9e;
+      }
+
+      .cls-5 {
+        stroke: #91f4ff;
+      }
+
+      .cls-5, .cls-6 {
+        stroke-width: 10px;
+      }
+
+      .cls-6 {
+        stroke: #2d5a9e;
+      }
+
+      .cls-7 {
+        stroke: none;
+      }
+
+      .cls-8 {
+        fill: none;
+      }
+
+      .cls-9 {
+        fill: #fff;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2" data-name="Rectangle 2" width="8000" height="8000" transform="translate(-3672 -3780)"/>
+    </clipPath>
+    <clipPath id="clip-SPRK_default_preset_name_custom_1">
+      <rect width="8000" height="8000"/>
+    </clipPath>
+  </defs>
+  <g id="SPRK_default_preset_name_custom_1" data-name="SPRK_default_preset_name_custom – 1" class="cls-1">
+    <rect class="cls-9" width="8000" height="8000"/>
+    <g id="NateD_Pills" data-name="NateD Pills" class="cls-2" transform="translate(3672 3780)">
+      <path id="Path_1" data-name="Path 1" class="cls-3" d="M0,0H7998.036V7998.036H0Z" transform="translate(-3672 -3780)"/>
+      <path id="Path_1-2" data-name="Path 1" class="cls-4" d="M0,0,7998.036,7998.036V0Z" transform="translate(-3672 -3780)"/>
+      <g id="Group_1" data-name="Group 1" transform="translate(107.562 51.656) rotate(45)">
+        <g id="Rectangle_1" data-name="Rectangle 1" class="cls-5" transform="translate(129.781 -69.117)">
+          <rect class="cls-7" width="65.225" height="142.699" rx="32.612"/>
+          <rect class="cls-8" x="5" y="5" width="55.225" height="132.699" rx="27.612"/>
+        </g>
+        <g id="Rectangle_2-2" data-name="Rectangle 2" class="cls-6" transform="translate(195.007 -147.367)">
+          <rect class="cls-7" width="65.225" height="142.7" rx="32.612"/>
+          <rect class="cls-8" x="5" y="5" width="55.225" height="132.7" rx="27.612"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

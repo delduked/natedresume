@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+
+  nated:
+    build:
+      context: .
+      dockerfile: nated.dockerfile
+    restart: "unless-stopped"
+    ports:
+      - "8080:8080"
+#    deploy:
+#      mode: global
+#    networks:
+#      natenet:
+
+  # proxy:
+  #   image: 'jc21/nginx-proxy-manager:latest'
+  #   restart: unless-stopped
+  #   ports:
+  #     - 80:80
+  #     - 81:81
+  #     - 443:443
+  #   volumes:
+  #     - proxydata:/data
+  #     - proxyencrypt:/etc/letsencrypt
+  #   deploy:
+  #     replicas: 1
+  #     placement:
+  #       constraints: [node.hostname == dock-01]
+  #   networks:
+  #     polkanet:
+
+#volumes:
+#  proxydata:
+#  proxyencrypt:
+#
+#networks:
+#  natenet:
+#    driver: overlay
+#    external: false
+#    ipam:
+#      config:
+#        - subnet: 10.0.0.0/16
+#          gateway: 10.0.0.1
