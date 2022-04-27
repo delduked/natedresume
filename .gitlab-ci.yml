@@ -4,9 +4,8 @@ stages:
 
 docker-build:
   rules:
-    # deploy to the docker setup at home when a push occurs to a branch 
-    # AND the commit that has been pushed contains the word "deploy"
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE =~ /deploy$/'
+      when: always
   stage: clear
   script:
     - docker --version 
@@ -16,18 +15,17 @@ docker-build:
     - docker-compose down --rmi all 
 docker-deploy:
   rules:
-    # deploy to the docker setup at home when a push occurs to a branch 
-    # AND the commit that has been pushed contains the word "deploy"
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE =~ /deploy$/'
+      when: always
   stage: deploy
   script:
     - docker-compose up -d --force-recreate 
 
+
+
 k3s-build:
-    # deploy to the docker setup at home when a push occurs to a branch 
-    # AND the commit that has been pushed contains the word "deploy"
-  only:
-    - merge_requests
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: clear
   script:
     - echo "bulding the image"
@@ -35,8 +33,8 @@ k3s-build:
     - docker push registry.nated.io/phosphorusmyesophagus/natedresume
 
 k3s-deploy:
-  only:
-    - merge_requests
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: clear
   script:
     - echo "deploy manifest file"
