@@ -2,7 +2,11 @@ stages:
   - clear
   - deploy
 
-build:
+docker-build:
+  rules:
+    # deploy to the docker setup at home when a push occurs to a branch 
+    # AND the commit that has been pushed contains the word "deploy"
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE =~ /deploy$/'
   stage: clear
   script:
     - docker --version 
@@ -10,14 +14,30 @@ build:
     - docker-compose rm -f -s -v 
     - echo "Removing any images related to docker compose file..."
     - docker-compose down --rmi all 
-#  tags:
-#    - localshell
-#    - localrunner 
-
-deploy:
+docker-deploy:
+  rules:
+    # deploy to the docker setup at home when a push occurs to a branch 
+    # AND the commit that has been pushed contains the word "deploy"
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE =~ /deploy$/'
   stage: deploy
   script:
     - docker-compose up -d --force-recreate 
-#  tags:
-#    - localhsell
-#    - localrunner
+
+k3s-build:
+    # deploy to the docker setup at home when a push occurs to a branch 
+    # AND the commit that has been pushed contains the word "deploy"
+  only:
+    - merge_requests
+  stage: clear
+  script:
+    - echo "bulding the image"
+    - docker build -t registry.nated.io/phosphorusmyesophagus/natedresume .
+    - docker push registry.nated.io/phosphorusmyesophagus/natedresume
+
+k3s-deploy:
+  only:
+    - merge_requests
+  stage: clear
+  script:
+    - echo "deploy manifest file"
+    - kubectl apply -f deploy.yaml
