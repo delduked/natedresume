@@ -32,7 +32,7 @@ spec:
   - hosts:
     - nated.ca
     - www.nated.ca
-    secretName: natedca-origin
+    secretName: natedca
 ---
 apiVersion: v1
 kind: Service
@@ -54,7 +54,7 @@ kind: Deployment
 metadata:
   name: natedca-depl
 spec:
-  replicas: 3
+  replicas: 10
   selector:
     matchLabels:
       app: natedca
@@ -64,7 +64,7 @@ spec:
         app: natedca
     spec:
       imagePullSecrets:
-      - name: natedio-registry
+      - name: registry.nated.io
       containers:
       - name: natedca
         image: registry.nated.io/phosphorusmyesophagus/natedresume:latest
