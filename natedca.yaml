@@ -7,9 +7,67 @@ data:
   tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tDQpNSUlFdndJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLa3dnZ1NsQWdFQUFvSUJBUUR2RExOUDdFYWR3SGtjDQo1bHM0aVRXelhMN2tzZUpUR2M3dU9hMjMwZ0JTOXF5WitkbWNaWlV4TjNxaDZqTTZmMzduYzNhWTJxZ1A0OG9VDQpLMDlZOW1tc2pEWEh6WjA0ZmVNUm40eWFtTzdiRlhndzFEWjgzODBSMWptOGxzQ2YyYStYQTlEelhVWGI0UUdaDQp1L0VJblUwYnRvaEpQa3hMdTNpQTY2NzZucUNYajVGY0xIRDNaNElzQzZya0ljM0FzUjkwdHpybXNKcnNGazVqDQowTWlJdVduTWdDSXZNQWNIOW9PbUp4STNxMnZ4SW9JNXk1V1YrQVN1RnNETEovNVo4Nkt0MXNFT2c5dFJ1OTgwDQpPK3JlcGluclBkNmR1L21rZ0plczRnVkNIcXdHVGZhTi9UTGZvUGhMb1VibmJhbkN6TlNobGpXOGtJY2l6VEE4DQpmenBJWjNNUkFnTUJBQUVDZ2dFQUFJT3BleG1LQ1ZyWnA5dERCUHNlbDNVeW4vRldDRkc4NVR4UWlGMjJUSGRsDQpaYXRvOFhJeWdQbWFsUENaRFo0cW1ycmYzWEpTL0QzRU9JampVZEN0NTRZaHMzMVl3ajliRnJXZUt0TDdhSk5DDQpQL0NrOFYzVjVoenM0Ti8rS0JuaXk5TmhSclREcXJad04zRjFFa3lzVnN2c3ZTT2FMR3VKMWRVcitqUVBLbVJPDQpuajFsUDhxQ1p0Y0d0OUF2cDBSNUFMYldKQVBMN2pnUmRmY1cvb2p2UTZxSCtHUUV6dzh1eHI1WUJGY09oMDF2DQpjQ29BK0c5c080VVJ3MXRFcUtEQXordjFVZWh5MWVFSGZLRnAwc1JDK1UvUWIweUNCNjFnVlp5ZUthM3B2M3hFDQpzM3V5dFNFdlBzdzZtTDFQRlBHRmlhTDRKOC9LcFhPMnV1Q0plbDBwbFFLQmdRRDVqNElSbDBUT3h6M0FFNGZWDQpyeFYyeG8rSkE3TEloRzByMnZGdVV6N294Y2pIUTh0NGZIOE14Z1pBQjF4T3c0SDJLVmIxOXBmakE4Ym16WG1kDQptUUszQ05VN2ZzVGcwNzJZZ08rekhVSHBpSm5uaFc0WlJWdm1mZVowUzExQUFDUll0TGVVeUIxNUp2MEc0RDZ5DQpsbUFWTGdLY3ZUWHIzS1dtMk5DUFNVS2ZSd0tCZ1FEMU44TG5OUC9hcytuMEx5L1JIaGFoRkI3aFhNQXd5YlNjDQpIcEZhNCtmT0FhUUxMTVk4czJ6ZWY2N2ZlTXloRUtTbU5jZmxva3J5a0ZocWQwVUxtK0dZdDVRbGs4d25TWllmDQpYL1lQZkQ2WVR3MjYrWXNDaUNvZUpDei9MUlg2dTdGeXVhNlRndFNFbnozY09qRWJCd1Jpa1lWelJIRmd1NFBODQpUem5USHFsMjV3S0JnUURmSlJyQWIrbnVtdWowSG9LTzV3YmlOWm1TZ2VRU3Q1YUdhRGNJMXhhaFBIalM5Q096DQprRjVxSlliaEtiTzRHY2pUT3hPdXl0ZjAvU09VckpYWi9UOFlPcVd2bFNLbGhhODU5ZEJlOEFKSHR3VW1wNEJTDQp5Rm5zTnhjaFZXSUVJQnhmMVBkeDZaMncvdE93bWtKMW5WQThuKzltQnlsM3hNdTU3SlJRQ3NtdmNRS0JnUUMzDQpyTUhIcnhJcC9mTXluUm1pK0hlWXhkcHZrYXEvb0lZeEhsQmdGUyt2UmRsYktYbC9SQ0k2OHNiSXl0SHpudVRGDQpQcWx4WHNQbXRxb1RiUzBCaWd4TCtNMzE2NlBTbGJMbDQxb0t0VlNwZnlWWXRNd2o1Rnd2NFliMnlBMmJsblZPDQo2cmhSODRBOXFvMktaT2dkUjM5SVdabnRBZ291bTZZWTVjdjVVQkU5WndLQmdRQ25QaWNUY0piUjdmU3pOZVFHDQpCRTFESkxqQUxHa3lmQ2NEVFhyTTFxTzk4Y3RGcU5kTjJvWEJGSWZzcWZRQTY1MkoxeldhcWRiSDBpaUp1RnRlDQpHdmFzSzUzMTFDdFlWeENTNVFzUHBMMi9YYngybFE2dzZRVmtpVFVrakRHa2pKZEN6R0tzVVA1T3l1dUhNRU5ZDQozYjh3TkozbWNvUGkzOFZUcklxNVRybmhzdz09DQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tDQo=
 ---
 apiVersion: v1
-metadata:
-  name: registry.nated.io
 kind: Secret
-type: kubernetes.io/dockerconfigjson
+metadata:
+  name: ghcr.io-secret
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS5uYXRlZC5pbyI6eyJ1c2VybmFtZSI6Im5hdGUiLCJwYXNzd29yZCI6Im1BZmE0eF9hWUEzdkRpUkFvYVRXIiwiZW1haWwiOiJuYXRlQG5hdGVkLmNhIiwiYXV0aCI6ImJtRjBaVHB0UVdaaE5IaGZZVmxCTTNaRWFWSkJiMkZVVnc9PSJ9fX0=
+  .dockerconfigjson: eyJhdXRocyI6eyJnaGNyLmlvIjp7ImF1dGgiOiJaR1ZzWkhWclpXUTZaMmh3WDNaRlZUWjNUM3BTZEdwRGFXUnhaVlpPUmpGNWRVbFZaazEyVERsRFRqUk1TMGR0ZGc9PSJ9fX0=
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: natedca
+spec:
+  tls:
+    - hosts:
+        - nated.ca
+      secretName: natedca
+  rules:
+    - host: nated.ca
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: natedca
+                port:
+                  number: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: natedca
+spec:
+  type: ClusterIP
+  selector:
+    app: natedca
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: natedca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: natedca
+  template:
+    metadata:
+      labels:
+        app: natedca
+    spec:
+      containers:
+        - name: natedca
+          image: ghcr.io/delduked/natedresume:latest
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: ghcr.io-secret
+
