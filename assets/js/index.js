@@ -1,6 +1,3 @@
-Moralis.initialize("QYoLPJoDPHmU2sMQI61lX5udJIxxLFoczPqGjz9X"); // Application id from moralis.io
-Moralis.serverURL = "https://uim1ha4domav.moralisweb3.com:2053/server"; //Server url from moralis.io
-
 // Tells me how many h2 elements are after the .yep element. When the array length equals 0, i know that their are no more
 // h2 elements with the .yep class. That way, I can remove all .yep class from all h2 elements and re assign the .yep element
 // onto the first h2 element
@@ -71,43 +68,4 @@ $('section.crypto .square .side.forward').on('click', function (){
   } else {
     console.log('Thats weird.');
   }
-});
-
-$(document).ready(function(){
-
-  async function login(){
-    console.log("login clicked");
-    var user = await Moralis.Web3.authenticate();
-    if(user){
-      console.log(user);
-      user.save();
-    }
-  }
-  login();
-
-  var getEthPrice = async () =>{
-    try {
-
-      var setting = {
-        method: 'GET',
-        //params : {chain: "eth",chain_name:"mainnet"},
-        headers: {
-          Accept: 'application/json',
-          'Content-type': 'application/json',
-          'X-API-Key': 'OxTXlbEDOyhVUPDPZpdIwXP5UNx4aXVsLAekJ9rREl1kGXDngxZGcsQ3I2K02wPT'
-        }
-      }
-
-      var url = `https://deep-index.moralis.io/api/v2/erc20/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0/price`
-      var res = await fetch(url,setting)
-      var price = await res.json()
-      console.log(price)
-      return price
-    } catch (err){
-      console.log(err)
-    }
-  }
-
-  getEthPrice().then((data)=> console.log(data.usdPrice))
-
 });
