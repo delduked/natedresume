@@ -65,7 +65,9 @@ spec:
     spec:
       containers:
         - name: natedca
-          image: ghcr.io/delduked/natedresume:latest
+          #image: ghcr.io/delduked/natedresume:latest
+          image: ghcr.io/delduked/natedresume:v_d27209a
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
       imagePullSecrets:

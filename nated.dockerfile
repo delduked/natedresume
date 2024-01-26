@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . /app
 RUN go mod download
 RUN go get -v
-RUN go build -o /app/main
+RUN GOOS=linux GOARCH=amd64 go build -o /app/main
 
 FROM alpine:latest
 WORKDIR /app
