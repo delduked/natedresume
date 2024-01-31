@@ -47,7 +47,7 @@ jobs:
         run: |
           kubectl config set-context nated-cluster
           helm init 
-          helm install --name natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run
+          helm upgrade --name natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run
 
       - name: Helm Deploy
         if: steps.helm_test.outcome == 'success'
@@ -55,7 +55,7 @@ jobs:
         run: |
           kubectl config set-context nated-cluster
           helm init 
-          helm install --name natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }}
+          helm upgrade --name natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }}
 
   release:
     needs: helm
