@@ -42,11 +42,11 @@ jobs:
           echo "${{ secrets.CIVO_KUBE_CONFIG }}" > kubeconfig.yml
         shell: bash
 
-      - name: Helm Init
-        id: helm_init
-        run: |
-          helm init
-        shell: bash
+      # - name: Helm Init
+      #   id: helm_init
+      #   run: |
+      #     helm init
+      #   shell: bash
 
       - name: Helm Test
         id: helm_test
