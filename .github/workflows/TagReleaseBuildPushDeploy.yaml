@@ -39,6 +39,7 @@ jobs:
 
       - name: Set up Kubeconfig
         run: |
+          mkdir /home/gh/.kube
           echo "${{ secrets.CIVO_KUBE_CONFIG }}" > /home/gh/.kube/config
           kubectl config set-context nated-cluster
         shell: bash
