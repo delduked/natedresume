@@ -11,9 +11,8 @@ jobs:
     #   - name: Install docker
     #     uses: papodaca/install-docker-action@main
 
-  start:
+  setup:
     runs-on: [self-hosted, Linux, X64, natedresume]
-    # needs: install
     steps:
       - uses: actions/checkout@v3
       
@@ -34,10 +33,12 @@ jobs:
           docker build -t ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} ./ -f ./nated.dockerfile
           docker push ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} 
           echo "image natedresume was built and pushed succesfully."
-      
+  helm:
+    needs: setup
+    runs-on: [self-hosted, Linux, X64, natedresume]
+    steps:
       - name: Helm Test
         id: helm_test
-        if: steps.create_release.outcome == 'success'
         uses: vimeda/helm@v1.6.8
         with:
           token: ${{ secrets.GH_RUNNER }}
@@ -64,10 +65,12 @@ jobs:
             VERSION: ${{ steps.create_tag.outputs.tag }} 
         env: 
           KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
-
+  release:
+    needs: helm
+    runs-on: [self-hosted, Linux, X64, natedresume]
+    steps:
       - name: Create Release
         id: create_release
-        if: steps.helm_deploy.outcome == 'success'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
