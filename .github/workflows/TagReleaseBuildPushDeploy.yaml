@@ -5,15 +5,15 @@ on:
       - civo
 
 jobs:
-  install:
-    runs-on: [self-hosted, Linux, X64, natedresume]
-    steps:
-      - name: Install docker
-        uses: papodaca/install-docker-action@main
+  # install:
+    # runs-on: [self-hosted, Linux, X64, natedresume]
+    # steps:
+    #   - name: Install docker
+    #     uses: papodaca/install-docker-action@main
 
   start:
     runs-on: [self-hosted, Linux, X64, natedresume]
-    needs: install
+    # needs: install
     steps:
       - name: Calculate next release tag
         id: create_tag
