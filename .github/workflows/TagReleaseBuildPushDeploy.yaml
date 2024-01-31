@@ -39,25 +39,26 @@ jobs:
 
       - name: Set up Kubeconfig
         run: |
-          echo "${{ secrets.CIVO_KUBE_CONFIG }}" > kubeconfig.yml
+          echo "${{ secrets.CIVO_KUBE_CONFIG }}" > /home/gh/.kube/config
+          kubectl config set-context nated-cluster
         shell: bash
 
       # - name: Helm Init
       #   id: helm_init
       #   run: |
-      #     helm init
+      #     export KUBECONFIG
       #   shell: bash
 
       - name: Helm Test
         id: helm_test
         run: |
-          helm install natedca ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run --kubeconfig ./kubeconfig.yml --kube-apiserver ${{ secrets.CIVO_API_ENDPOINT }}
+          helm install natedca ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run --kubeconfig /home/gh/.kube/config
 
       - name: Helm Deploy
         if: steps.helm_test.outcome == 'success'
         id: helm_deploy
         run: |
-          helm install natedca ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --kubeconfig ./kubeconfig.yml --kube-apiserver ${{ secrets.CIVO_API_ENDPOINT }}
+          helm install natedca ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --kubeconfig /home/gh/.kube/config
 
   release:
     needs: helm
