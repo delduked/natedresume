@@ -30,35 +30,40 @@ jobs:
           docker build -t ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} ./ -f ./nated.dockerfile
           docker push ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} 
           echo "image natedresume was built and pushed succesfully."
-  helm:
+  kubectl:
     needs: setup
     runs-on: [self-hosted, Linux, X64, natedresume]
     steps:
       
       - uses: actions/checkout@v3
 
-      - name: Set up Kubeconfig
+      - name: kubectl
+        id: kubectl
         run: |
           echo "${{ secrets.CIVO_KUBE_CONFIG }}" > /home/gh/.kube/config
+          kubectl config set-context nated-cluster
+
+          # Hardcoded values
+          manifest_file="natedresume.yaml"  # Replace with your actual file path
+          new_tag="${{ steps.create_tag.outputs.tag }} "  # Replace with the new tag you want to use
+
+          # Check if the manifest file exists
+          if [ ! -f "$manifest_file" ]; then
+              echo "Error: Manifest file does not exist."
+              exit 1
+          fi
+
+          # Use sed to replace the image tag
+          sed -i "s|ghcr.io/delduked/natedresume:[a-zA-Z0-9_\-]*|ghcr.io/delduked/natedresume:${new_tag}|g" $manifest_file
+
+          echo "Image tag updated in manifest file."
+
+          kubectl apply -f natedresume.yaml --namespace natedca
+
         shell: bash
 
-      - name: Helm Test
-        id: helm_test
-        run: |
-          kubectl config set-context nated-cluster
-          helm init 
-          helm upgrade natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run
-
-      - name: Helm Deploy
-        if: steps.helm_test.outcome == 'success'
-        id: helm_deploy
-        run: |
-          kubectl config set-context nated-cluster
-          helm init 
-          helm upgrade natedresume ./charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }}
-
   release:
-    needs: helm
+    needs: kubectl
     runs-on: [self-hosted, Linux, X64, natedresume]
     steps:
       - name: Create Release
