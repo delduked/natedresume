@@ -3,21 +3,21 @@ kind: Ingress
 metadata:
   name: natedca
 spec:
-  tls:
-    - hosts:
-        - nated.ca
-      secretName: natedca
   rules:
-    - host: nated.ca
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: natedca
-                port:
-                  number: 8080
+  - host: nated.ca
+    http:
+      paths:
+      - backend:
+          service:
+            name: natedca
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - nated.ca
+    secretName: natedca
 
 ---
 apiVersion: v1

@@ -57,7 +57,7 @@ jobs:
           sed -i "s|ghcr.io/delduked/natedresume:[a-zA-Z0-9_\-]*|ghcr.io/delduked/natedresume:${new_tag}|g" $manifest_file
 
           echo "Image tag updated in manifest file."
-
+          cat natedresume.yaml
           kubectl apply -f natedresume.yaml --namespace natedca
 
         shell: bash
