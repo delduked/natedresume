@@ -5,14 +5,11 @@ on:
       - civo
 
 jobs:
-  # install:
-    # runs-on: [self-hosted, Linux, X64, natedresume]
-    # steps:
-    #   - name: Install docker
-    #     uses: papodaca/install-docker-action@main
-
   setup:
     runs-on: [self-hosted, Linux, X64, natedresume]
+    outputs:
+      tagname: ${{ steps.create_tag.outputs.tagname }}
+      tag: ${{ steps.create_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
       
@@ -37,6 +34,7 @@ jobs:
     needs: setup
     runs-on: [self-hosted, Linux, X64, natedresume]
     steps:
+      - uses: actions/checkout@v3
       - name: Helm Test
         id: helm_test
         uses: vimeda/helm@v1.6.8
@@ -47,7 +45,7 @@ jobs:
           chart: 'charts'
           dry-run: true
           values: |
-            VERSION: ${{ steps.create_tag.outputs.tag }} 
+            VERSION: ${{ needs.setup.outputs.tag }} 
         env: 
           KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
       
@@ -62,7 +60,7 @@ jobs:
           chart: 'charts'
           dry-run: false
           values: |
-            VERSION: ${{ steps.create_tag.outputs.tag }} 
+            VERSION: ${{ needs.setup.outputs.tag }}
         env: 
           KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
   release:
@@ -75,7 +73,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
         with:
-          tag_name: ${{ steps.create_tag.outputs.tag }}
-          release_name: ${{ steps.create_tag.outputs.tagname }}
+          tag_name: ${{ needs.setup.outputs.tag }}
+          release_name: ${{ needs.setup.outputs.tagname }}
           draft: false
           prerelease: false
