@@ -35,34 +35,23 @@ jobs:
     runs-on: [self-hosted, Linux, X64, natedresume]
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.CIVO_KUBE_CONFIG }}" > kubeconfig.yml
+        shell: bash
+
       - name: Helm Test
         id: helm_test
-        uses: 'vimeda/helm@v1.7.0'
-        with:
-          token: ${{ secrets.GH_RUNNER }}
-          release: 'civo'
-          namespace: 'natedca'
-          chart: 'charts'
-          dry-run: true
-          values: |
-            VERSION: ${{ needs.setup.outputs.tag }} 
-        env: 
-          KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
-      
+        run: |
+          helm upgrade --install civo charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --dry-run --kubeconfig kubeconfig.yml
+
       - name: Helm Deploy
-        id: helm_deploy
         if: steps.helm_test.outcome == 'success'
-        uses: 'vimeda/helm@v1.7.0'
-        with:
-          token: ${{ secrets.GH_RUNNER }}
-          release: 'civo'
-          namespace: 'natedca'
-          chart: 'charts'
-          dry-run: false
-          values: |
-            VERSION: ${{ needs.setup.outputs.tag }}
-        env: 
-          KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
+        id: helm_deploy
+        run: |
+          helm upgrade --install civo charts --namespace natedca --set VERSION=${{ needs.setup.outputs.tag }} --kubeconfig kubeconfig.yml
+
   release:
     needs: helm
     runs-on: [self-hosted, Linux, X64, natedresume]
