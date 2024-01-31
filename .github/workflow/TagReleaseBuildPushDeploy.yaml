@@ -1,0 +1,71 @@
+name: TagReleaseBuildPushDeploy
+on:
+  push:
+    branches:
+      - civo
+
+jobs:
+  ui:
+    runs-on: [self-hosted, Linux, X64, natedresume]
+    steps:
+      - name: Calculate next release tag
+        id: create_tag
+        run: |
+          VERSION=$(git rev-parse --short HEAD)
+          DATE=$(date +'%Y%m%d')
+          VVERSION=${DATE}v_${VERSION}
+          echo "tag=v_${VERSION}" >> $GITHUB_OUTPUT
+          echo "tagname=${VVERSION}" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v3
+
+      - name: Build and push docker image
+        id: docker_build
+        run : |
+          echo "building natedresume image"
+          export CR_PAT=${{ secrets.GH_RUNNER }} ; echo $CR_PAT | docker login ghcr.io -u delduked --password-stdin
+          docker build -t ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} ./ -f ./nated.dockerfile
+          docker push ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} 
+          echo "image natedresume was built and pushed succesfully."
+      
+      - name: Helm Test
+        id: helm_test
+        if: steps.create_release.outcome == 'success'
+        uses: vimeda/helm@v1.6.8
+        with:
+          token: ${{ secrets.GH_RUNNER }}
+          release: 'civo'
+          namespace: 'natedca'
+          chart: 'charts'
+          dry-run: true
+          values: |
+            VERSION: ${{ steps.create_tag.outputs.tag }} 
+        env: 
+          KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
+      
+      - name: Helm Deploy
+        id: helm_deploy
+        if: steps.helm_test.outcome == 'success'
+        uses: vimeda/helm@v1.6.8
+        with:
+          token: ${{ secrets.GH_RUNNER }}
+          release: 'civo'
+          namespace: 'natedca'
+          chart: 'charts'
+          dry-run: false
+          values: |
+            VERSION: ${{ steps.create_tag.outputs.tag }} 
+        env: 
+          KUBECONFIG_FILE: '${{ secrets.CIVO_KUBE_CONFIG }}'
+
+      - name: Create Release
+        id: create_release
+        if: steps.helm_deploy.outcome == 'success'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.tag }}
+          release_name: ${{ steps.create_tag.outputs.tagname }}
+          draft: false
+          prerelease: false
