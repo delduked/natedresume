@@ -56,22 +56,18 @@ jobs:
           sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ needs.setup.outputs.tag }}|g" $manifest_file
           echo "version: ${{ needs.setup.outputs.tag }}"
           echo "Image tag updated in manifest file."
-          cat natedresume.yaml
           kubectl apply -f natedresume.yaml --namespace natedca
 
         shell: bash
 
-  release:
-    needs: kubectl
-    runs-on: [self-hosted, Linux, X64, natedresume]
-    steps:
       - name: Create Release
         id: create_release
+        if: steps.kubectl.outcome == 'success'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
         with:
-          tag_name: "${{ needs.setup.outputs.tag }}"
-          release_name: "${{ needs.setup.outputs.tagname }}"
+          tag_name: ${{ needs.setup.outputs.tag }}
+          release_name: ${{ needs.setup.outputs.tagname }}
           draft: false
           prerelease: false
