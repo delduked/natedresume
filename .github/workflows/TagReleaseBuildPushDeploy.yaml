@@ -45,7 +45,6 @@ jobs:
 
           # Hardcoded values
           manifest_file="./natedresume.yaml"  # Replace with your actual file path
-          new_tag="${{ steps.create_tag.outputs.tag }} "  # Replace with the new tag you want to use
 
           # Check if the manifest file exists
           if [ ! -f "$manifest_file" ]; then
@@ -54,7 +53,7 @@ jobs:
           fi
 
           # Use sed to replace the image tag
-          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ new_tag }}|g" $manifest_file
+          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }}|g" $manifest_file
 
           echo "Image tag updated in manifest file."
           cat natedresume.yaml
