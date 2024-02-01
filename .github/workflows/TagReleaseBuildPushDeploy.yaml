@@ -44,7 +44,7 @@ jobs:
           kubectl config set-context nated-cluster
 
           # Hardcoded values
-          manifest_file="natedresume.yaml"  # Replace with your actual file path
+          manifest_file="./natedresume.yaml"  # Replace with your actual file path
           new_tag="${{ steps.create_tag.outputs.tag }} "  # Replace with the new tag you want to use
 
           # Check if the manifest file exists
@@ -54,7 +54,7 @@ jobs:
           fi
 
           # Use sed to replace the image tag
-          sed -i "s|ghcr.io/delduked/natedresume:[a-zA-Z0-9_\-]*|ghcr.io/delduked/natedresume:${new_tag}|g" $manifest_file
+          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ new_tag }}|g" $manifest_file
 
           echo "Image tag updated in manifest file."
           cat natedresume.yaml
