@@ -12,7 +12,6 @@ jobs:
       tag: ${{ steps.create_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
-      
       - name: Calculate next release tag
         id: create_tag
         run: |
@@ -21,7 +20,6 @@ jobs:
           VVERSION=${DATE}v_${VERSION}
           echo "tag=v_${VERSION}" >> $GITHUB_OUTPUT
           echo "tagname=${VVERSION}" >> $GITHUB_OUTPUT
-
       - name: Build and push docker image
         id: docker_build
         run : |
@@ -33,10 +31,8 @@ jobs:
   kubectl:
     needs: setup
     runs-on: [self-hosted, Linux, X64, natedresume]
-    steps:
-      
+    steps: 
       - uses: actions/checkout@v3
-
       - name: kubectl
         id: kubectl
         run: |
