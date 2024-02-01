@@ -53,7 +53,7 @@ jobs:
           fi
 
           # Use sed to replace the image tag
-          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }}|g" $manifest_file > deploy.yaml
+          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }}|g" $manifest_file >> deploy.yaml
           echo "version: ${{ steps.create_tag.outputs.tag }}"
           echo "Image tag updated in manifest file."
           cat deploy.yaml
