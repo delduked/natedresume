@@ -53,11 +53,11 @@ jobs:
           fi
 
           # Use sed to replace the image tag
-          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }}|g" $manifest_file
-
+          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }}|g" $manifest_file > deploy.yaml
+          echo "version: ${{ steps.create_tag.outputs.tag }}"
           echo "Image tag updated in manifest file."
-          cat natedresume.yaml
-          kubectl apply -f natedresume.yaml --namespace natedca
+          cat deploy.yaml
+          kubectl apply -f deploy.yaml --namespace natedca
 
         shell: bash
 
