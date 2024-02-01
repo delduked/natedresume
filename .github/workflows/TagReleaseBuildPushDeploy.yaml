@@ -71,7 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
         with:
-          tag_name: ${{ needs.setup.outputs.tag }}
-          release_name: ${{ needs.setup.outputs.tagname }}
+          tag_name: "${{ needs.setup.outputs.tag }}"
+          release_name: "${{ needs.setup.outputs.tagname }}"
           draft: false
           prerelease: false
