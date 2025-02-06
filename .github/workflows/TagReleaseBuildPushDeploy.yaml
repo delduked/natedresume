@@ -6,7 +6,7 @@ on:
 
 jobs:
   setup:
-    runs-on: [typeterrors-runners]
+    runs-on: type-terrors-arc
     outputs:
       computed_tag: ${{ steps.create_tag.outputs.tag }}
       computed_tagname: ${{ steps.create_tag.outputs.tagname }}
