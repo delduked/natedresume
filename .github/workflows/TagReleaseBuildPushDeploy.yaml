@@ -2,47 +2,115 @@ name: TagReleaseBuildPushDeploy
 on:
   push:
     branches:
-      - civo
+      - main
 
 jobs:
   setup:
-    runs-on: [self-hosted, Linux, X64, natedresume]
+    runs-on: [typeterrors-runners]
     outputs:
-      tagname: ${{ steps.create_tag.outputs.tagname }}
-      tag: ${{ steps.create_tag.outputs.tag }}
+      computed_tag: ${{ steps.create_tag.outputs.tag }}
+      computed_tagname: ${{ steps.create_tag.outputs.tagname }}
     steps:
       - uses: actions/checkout@v3
       
-      - name: Calculate next release tag
+      - name: Calculate next tag
         id: create_tag
         run: |
-          VERSION=$(git rev-parse --short HEAD)
+          COMMIT_SHA=${{ steps.short-sha.outputs.sha }}
           DATE=$(date +'%Y%m%d')
-          VVERSION=${DATE}v_${VERSION}
-          echo "tag=v_${VERSION}" >> $GITHUB_OUTPUT
-          echo "tagname=${VVERSION}" >> $GITHUB_OUTPUT
+          UNIX_TIME=$(date +%s)
+          HEX_UNIX_TIME=$(printf '%x' $UNIX_TIME)
+          
+          echo "tag=v_${COMMIT_SHA}.${HEX_UNIX_TIME}" >> $GITHUB_OUTPUT
+          echo "tagname=v_${COMMIT_SHA}.${DATE}" >> $GITHUB_OUTPUT
+
       - name: Build and push docker image
         id: docker_build
         run : |
           echo "building natedresume image"
-          export CR_PAT=${{ secrets.GH_RUNNER }} ; echo $CR_PAT | docker login ghcr.io -u delduked --password-stdin
+          export CR_PAT=${{ secrets.ACCESS_TOKEN }} ; echo $CR_PAT | docker login ghcr.io -u delduked --password-stdin
           docker build -t ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} ./ -f ./nated.dockerfile
           docker push ghcr.io/delduked/natedresume:${{ steps.create_tag.outputs.tag }} 
           echo "image natedresume was built and pushed succesfully."
+      
+      - name: Configure Kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          kubectl config get-contexts
+
+      - name: Create Image Pull Secret 
+        run: |
+          # Ensure the target namespace exists
+          kubectl create namespace natedca --dry-run=client -o yaml | kubectl apply -f -
+          
+          # Create the image pull secret
+          kubectl create secret docker-registry delduked-gh-pat \
+            --docker-server=ghcr.io \
+            --docker-username=delduked \
+            --docker-password="${{ secrets.ACCESS_TOKEN }}" \
+            --docker-email="nate@nated.ca" \
+            --namespace=natedca \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Create TLS Secret
+        run: |
+          echo "${{ secrets.TLS_CERT }}" > /tmp/tls.crt
+          echo "${{ secrets.TLS_KEY }}"  > /tmp/tls.key
+
+          kubectl create namespace natedca --dry-run=client -o yaml | kubectl apply -f -
+
+          kubectl create secret tls nated-tls \
+            --cert=/tmp/tls.crt \
+            --key=/tmp/tls.key \
+            --namespace=nated \
+            --dry-run=client -o yaml | kubectl apply -f -
   kubectl:
     needs: setup
     runs-on: [self-hosted, Linux, X64, natedresume]
     steps: 
       - uses: actions/checkout@v3
-      
+
+      - run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          kubectl config get-contexts
+
+      - name: Create Image Pull Secret 
+        run: |
+          # Ensure the target namespace exists
+          kubectl create namespace natedca --dry-run=client -o yaml | kubectl apply -f -
+          
+          # Create the image pull secret
+          kubectl create secret docker-registry delduked-gh-pat \
+            --docker-server=ghcr.io \
+            --docker-username=delduked \
+            --docker-password="${{ secrets.ACCESS_TOKEN }}" \
+            --docker-email="nate@nated.ca" \
+            --namespace=natedcav \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Create TLS Secret
+        run: |
+          echo "${{ secrets.TLS_CERT }}" > /tmp/tls.crt
+          echo "${{ secrets.TLS_KEY }}"  > /tmp/tls.key
+
+          kubectl create namespace natedca --dry-run=client -o yaml | kubectl apply -f -
+
+          kubectl create secret tls nated-tls \
+            --cert=/tmp/tls.crt \
+            --key=/tmp/tls.key \
+            --namespace=natedv \
+            --dry-run=client -o yaml | kubectl apply -f -
+
       - name: kubectl
         id: kubectl
+        shell: bash
         run: |
           echo "${{ secrets.CIVO_KUBE_CONFIG }}" > /home/gh/.kube/config
-          kubectl config set-context nated-cluster
 
           # Hardcoded values
-          manifest_file="./natedresume.yaml"  # Replace with your actual file path
+          manifest_file="./natedresume.yaml"
 
           # Check if the manifest file exists
           if [ ! -f "$manifest_file" ]; then
@@ -51,21 +119,20 @@ jobs:
           fi
 
           # Use sed to replace the image tag
-          sed -i "s|container-image|ghcr.io/delduked/natedresume:${{ needs.setup.outputs.tag }}|g" $manifest_file
-          echo "version: ${{ needs.setup.outputs.tag }}"
+          sed -i "s|container-image|ghcr.io/typeterrors/natedresume:${{ needs.setup.outputs.computed_tag }}|g" $manifest_file
+          echo "version: ${{ needs.setup.outputs.computed_tag }}"
           echo "Image tag updated in manifest file."
           kubectl apply -f natedresume.yaml --namespace natedca
 
-        shell: bash
 
       - name: Create Release
         id: create_release
         if: steps.kubectl.outcome == 'success'
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_RUNNER }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          tag_name: ${{ needs.setup.outputs.tag }}
-          release_name: ${{ needs.setup.outputs.tagname }}
+          tag_name: ${{ needs.setup.outputs.computed_tag }}
+          release_name: ${{ needs.setup.outputs.computed_tagname }}
           draft: false
           prerelease: false

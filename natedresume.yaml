@@ -7,7 +7,7 @@ spec:
   tls:
     - hosts:
         - nated.ca
-      secretName: natedca
+      secretName: natedca-tls
   rules:
     - host: nated.ca
       http:
@@ -62,4 +62,4 @@ spec:
               cpu: "0.25"
               memory: 200Mi
       imagePullSecrets:
-        - name: ghcr.io-secret
+        - name: delduked-gh-pat
